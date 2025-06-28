@@ -20,6 +20,7 @@ interface ButtonProps {
   style?: ViewStyle;
   textStyle?: TextStyle;
   fullWidth?: boolean;
+  icon?: React.ReactNode;
 }
 
 export function Button({
@@ -32,6 +33,7 @@ export function Button({
   style,
   textStyle,
   fullWidth = false,
+  icon,
 }: ButtonProps) {
   const { colors } = useTheme();
 
@@ -77,7 +79,10 @@ export function Button({
           color={variant === "primary" ? "white" : colors.primary}
         />
       ) : (
-        <Text style={titleStyles}>{title}</Text>
+        <>
+          {icon && <>{icon}</>}
+          <Text style={titleStyles}>{title}</Text>
+        </>
       )}
     </TouchableOpacity>
   );

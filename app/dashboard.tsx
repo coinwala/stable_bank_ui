@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useBank } from "@/hooks/useBank";
 import { useTheme } from "@/providers/ThemeProvider";
 import { bankService } from "@/services/bankService";
+import { Ionicons } from '@expo/vector-icons';
 
 export default function DashboardScreen() {
   const { user, logout } = useAuth();
@@ -242,7 +243,11 @@ export default function DashboardScreen() {
           <View style={styles.header}>
             <Text style={styles.headerText}>StableBank</Text>
             <TouchableOpacity style={styles.themeToggle} onPress={toggleTheme}>
-              <Text style={{ fontSize: 20 }}>{theme === 'light' ? '🌙' : '☀️'}</Text>
+              <Ionicons
+                name={theme === 'light' ? 'moon' : 'sunny'}
+                size={24}
+                color={theme === 'light' ? colors.text : colors.text}
+              />
             </TouchableOpacity>
           </View>
 
@@ -267,6 +272,7 @@ export default function DashboardScreen() {
               loading={isProcessing}
               style={styles.actionButton}
               variant="outline"
+              icon={<Ionicons name="send" size={18} color={colors.text} style={{ marginRight: 8 }} />}
             />
             <Button
               title="Receive Money"
@@ -274,6 +280,7 @@ export default function DashboardScreen() {
               loading={isProcessing}
               style={styles.actionButton}
               variant="outline"
+              icon={<Ionicons name="download" size={18} color={colors.text} style={{ marginRight: 8 }} />}
             />
             <Button
               title="Add Money"
@@ -281,6 +288,7 @@ export default function DashboardScreen() {
               loading={isProcessing}
               style={styles.actionButton}
               variant="outline"
+              icon={<Ionicons name="add-circle" size={18} color={colors.text} style={{ marginRight: 8 }} />}
             />
             <Button
               title="Scan & Pay"
@@ -288,6 +296,7 @@ export default function DashboardScreen() {
               loading={isProcessing}
               style={styles.actionButton}
               variant="outline"
+              icon={<Ionicons name="qr-code" size={18} color={colors.text} style={{ marginRight: 8 }} />}
             />
           </View>
 
