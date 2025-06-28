@@ -7,7 +7,8 @@ import {
   ViewStyle,
   TextStyle,
 } from "react-native";
-import { Colors, Typography, Spacing } from "@/constants";
+import { Typography, Spacing } from "@/constants";
+import { useTheme } from "@/providers/ThemeProvider";
 
 interface ButtonProps {
   title: string;
@@ -32,9 +33,17 @@ export function Button({
   textStyle,
   fullWidth = false,
 }: ButtonProps) {
+  const { colors } = useTheme();
+
   const buttonStyles = [
     styles.base,
-    styles[variant],
+    {
+      ...styles[variant],
+      backgroundColor: variant === "primary" ? colors.primary : 
+                     variant === "secondary" ? colors.backgroundSecondary :
+                     "transparent",
+      borderColor: variant === "outline" ? colors.border : "transparent",
+    },
     styles[size],
     fullWidth && styles.fullWidth,
     disabled && styles.disabled,
@@ -43,9 +52,15 @@ export function Button({
 
   const titleStyles = [
     styles.text,
-    styles[`${variant}Text`],
+    {
+      ...styles[`${variant}Text`],
+      color: variant === "primary" ? "white" :
+             variant === "secondary" ? colors.text :
+             variant === "outline" ? colors.primary :
+             colors.primary,
+    },
     styles[`${size}Text`],
-    disabled && styles.disabledText,
+    disabled && { color: colors.textMuted },
     textStyle,
   ];
 
@@ -59,7 +74,7 @@ export function Button({
       {loading ? (
         <ActivityIndicator
           size="small"
-          color={variant === "primary" ? Colors.text : Colors.primary}
+          color={variant === "primary" ? "white" : colors.primary}
         />
       ) : (
         <Text style={titleStyles}>{title}</Text>
@@ -76,15 +91,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   primary: {
-    backgroundColor: Colors.primary,
+    // backgroundColor will be set dynamically
   },
   secondary: {
-    backgroundColor: Colors.backgroundSecondary,
+    // backgroundColor will be set dynamically
   },
   outline: {
     backgroundColor: "transparent",
     borderWidth: 1,
-    borderColor: Colors.border,
+    // borderColor will be set dynamically
   },
   ghost: {
     backgroundColor: "transparent",
@@ -115,16 +130,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   primaryText: {
-    color: Colors.text,
+    // color will be set dynamically
   },
   secondaryText: {
-    color: Colors.text,
+    // color will be set dynamically
   },
   outlineText: {
-    color: Colors.primary,
+    // color will be set dynamically
   },
   ghostText: {
-    color: Colors.primary,
+    // color will be set dynamically
   },
   smallText: {
     fontSize: Typography.fontSize.sm,
@@ -136,6 +151,6 @@ const styles = StyleSheet.create({
     fontSize: Typography.fontSize.lg,
   },
   disabledText: {
-    color: Colors.textMuted,
+    // color will be set dynamically
   },
 });

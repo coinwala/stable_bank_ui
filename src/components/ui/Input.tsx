@@ -7,7 +7,8 @@ import {
   ViewStyle,
   TextInputProps,
 } from "react-native";
-import { Colors, Typography, Spacing } from "@/constants";
+import { Typography, Spacing } from "@/constants";
+import { useTheme } from "@/providers/ThemeProvider";
 
 interface InputProps extends TextInputProps {
   label?: string;
@@ -27,28 +28,46 @@ export function Input({
   ...props
 }: InputProps) {
   const [isFocused, setIsFocused] = useState(false);
+  const { colors } = useTheme();
 
   return (
     <View style={[styles.container, containerStyle]}>
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && (
+        <Text style={[styles.label, { color: colors.text }]}>
+          {label}
+        </Text>
+      )}
       <View
         style={[
           styles.inputContainer,
-          isFocused && styles.focused,
-          error && styles.error,
+          {
+            backgroundColor: colors.backgroundSecondary,
+            borderColor: isFocused ? colors.primary : 
+                        error ? colors.error : colors.border,
+          },
         ]}
       >
         {leftIcon && <View style={styles.leftIcon}>{leftIcon}</View>}
         <TextInput
-          style={[styles.input, style]}
-          placeholderTextColor={Colors.textMuted}
+          style={[
+            styles.input,
+            {
+              color: colors.text,
+            },
+            style
+          ]}
+          placeholderTextColor={colors.textMuted}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           {...props}
         />
         {rightIcon && <View style={styles.rightIcon}>{rightIcon}</View>}
       </View>
-      {error && <Text style={styles.errorText}>{error}</Text>}
+      {error && (
+        <Text style={[styles.errorText, { color: colors.error }]}>
+          {error}
+        </Text>
+      )}
     </View>
   );
 }
@@ -60,29 +79,19 @@ const styles = StyleSheet.create({
   label: {
     fontSize: Typography.fontSize.sm,
     fontFamily: Typography.fontFamily.medium,
-    color: Colors.text,
     marginBottom: Spacing.sm,
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: Colors.backgroundSecondary,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: Colors.border,
     minHeight: 48,
-  },
-  focused: {
-    borderColor: Colors.primary,
-  },
-  error: {
-    borderColor: Colors.error,
   },
   input: {
     flex: 1,
     fontSize: Typography.fontSize.md,
     fontFamily: Typography.fontFamily.regular,
-    color: Colors.text,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.md,
   },
@@ -95,7 +104,6 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: Typography.fontSize.sm,
     fontFamily: Typography.fontFamily.regular,
-    color: Colors.error,
     marginTop: Spacing.xs,
   },
 });
